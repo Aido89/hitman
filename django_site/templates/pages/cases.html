@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Кейсы и результаты — Hitman IT{% endblock %}
+{% block description %}Реальные проекты: модернизация IT-сетей, многокамерные трансляции, отказоустойчивые серверы — с измеримыми результатами.{% endblock %}
+{% block content %}
+<main class="container" style="padding-top:2.5rem;padding-bottom:3rem">
+
+  <p class="section-kicker">// Что уже сделано</p>
+  <h1 class="font-display" style="color:var(--heading);margin:0">Кейсы и результаты</h1>
+  <div class="title-bar"></div>
+  <p class="text-dim" style="max-width:42rem">Задача, что было сделано и чем закончилось — без общих слов.</p>
+
+  <div style="display:grid;gap:1.5rem;margin-top:2rem">
+    {% for c in cases %}
+    <article class="card">
+      <div class="card-accent-bar"></div>
+
+      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:1rem;flex-wrap:wrap">
+        <h2 style="font-size:1.2rem;margin:0">{{ c.title }}</h2>
+        {% if c.client %}<span class="mono text-dim" style="font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase">{{ c.client }}</span>{% endif %}
+      </div>
+
+      {% if c.metrics %}
+      <div style="display:flex;gap:2rem;flex-wrap:wrap;margin:1.25rem 0;padding:1rem 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+        {% for num, label in c.metrics %}
+        <div>
+          <div class="font-display text-red" style="font-size:1.6rem;line-height:1">{{ num }}</div>
+          <div class="mono text-dim" style="font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;margin-top:0.2rem">{{ label }}</div>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      <div class="grid grid-3" style="gap:1.25rem">
+        <div>
+          <h3 class="mono text-red" style="font-size:0.68rem;letter-spacing:0.18em;text-transform:uppercase;margin:0 0 0.4rem">Задача</h3>
+          <p style="font-size:0.88rem;margin:0">{{ c.task }}</p>
+        </div>
+        <div>
+          <h3 class="mono text-red" style="font-size:0.68rem;letter-spacing:0.18em;text-transform:uppercase;margin:0 0 0.4rem">Что сделано</h3>
+          <p style="font-size:0.88rem;margin:0">{{ c.done }}</p>
+        </div>
+        <div>
+          <h3 class="mono text-red" style="font-size:0.68rem;letter-spacing:0.18em;text-transform:uppercase;margin:0 0 0.4rem">Результат</h3>
+          <p style="font-size:0.88rem;margin:0;color:var(--heading)">{{ c.result }}</p>
+        </div>
+      </div>
+
+      {% if c.tags %}
+      <div style="display:flex;flex-wrap:wrap;gap:0.35rem;margin-top:1.25rem">
+        {% for t in c.tags %}<span class="chip">{{ t }}</span>{% endfor %}
+      </div>
+      {% endif %}
+    </article>
+    {% endfor %}
+  </div>
+
+  <section style="text-align:center;margin-top:3rem">
+    <h2 class="section-title">Похожая задача?</h2>
+    <p class="text-dim" style="max-width:32rem;margin:0 auto 1.5rem">Рассчитайте смету онлайн или напишите — обсудим детали.</p>
+    <div style="display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap">
+      <a href="{% url 'orders:constructor' %}" class="btn btn-primary">Рассчитать смету</a>
+      <a href="{% url 'pages:services' %}" class="btn btn-outline-red">Все услуги</a>
+    </div>
+  </section>
+</main>
+{% endblock %}

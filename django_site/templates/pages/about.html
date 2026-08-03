@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}{{ about.name }} — Обо мне{% endblock %}
+{% block description %}{{ about.titles }}. {{ about.tagline }}{% endblock %}
+{% block content %}
+<header class="hero">
+  <div class="container" style="display:grid;grid-template-columns:1fr auto;gap:2rem;align-items:center">
+    <div>
+      <h1 class="font-display">{{ about.name }}</h1>
+      <p class="lead">{{ about.titles }}</p>
+      <p style="color:var(--text-dim);max-width:36rem">{{ about.tagline }}</p>
+      <p style="color:var(--text-dim);font-size:0.9rem">{{ about.location }} · {{ about.email }} · {{ about.phone }}</p>
+    </div>
+    <img src="{% static 'img/gallery/avatar-real.jpg' %}" alt="{{ about.name }}" width="140" height="140" style="border-radius:50%;object-fit:cover;border:3px solid var(--red)">
+  </div>
+</header>
+
+<main class="container" style="margin-top:1.5rem">
+  <div class="grid grid-2" style="align-items:start">
+    <div>
+      <section class="card" style="margin-bottom:1.5rem">
+        <div class="card-accent-bar"></div>
+        <h2 class="section-title">Обо мне</h2>
+        <p class="text-dim" style="font-size:0.9rem">{{ about.description }}</p>
+        <img src="{% static 'img/gallery/photo/portrait--Студийный портрет.jpeg' %}" alt="За работой" style="width:100%;margin:1rem 0;object-fit:cover;max-height:18rem">
+        {% for cat, desc in about.what_we_do %}
+        <div class="card" style="background:var(--card-alt);margin-top:0.75rem">
+          <h4 class="text-red" style="margin:0 0 0.25rem;font-size:0.8rem;text-transform:uppercase">{{ cat }}</h4>
+          <p style="margin:0;font-size:0.85rem">{{ desc }}</p>
+        </div>
+        {% endfor %}
+        <div class="card" style="background:rgba(220,38,38,0.08);margin-top:0.75rem">
+          <h4 style="margin:0 0 0.25rem;font-size:0.85rem">Немного личного</h4>
+          <p style="margin:0;font-size:0.85rem">{{ about.personal }}</p>
+        </div>
+        <div style="margin-top:0.75rem;display:flex;flex-wrap:wrap;gap:0.5rem">
+          {% for name, level in about.languages %}
+          <span class="chip">{{ name }}: {{ level }}</span>
+          {% endfor %}
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-accent-bar"></div>
+        <h2 class="section-title">Навыки</h2>
+        {% for cat, items in about.skills %}
+        <h4 class="text-dim" style="font-size:0.75rem;text-transform:uppercase;margin:1rem 0 0.5rem">{{ cat }}</h4>
+        <div style="display:flex;flex-wrap:wrap;gap:0.4rem">
+          {% for item in items %}<span class="chip">{{ item }}</span>{% endfor %}
+        </div>
+        {% endfor %}
+      </section>
+    </div>
+
+    <div>
+      <section class="card" style="margin-bottom:1.5rem">
+        <div class="card-accent-bar"></div>
+        <h2 class="section-title">Опыт работы</h2>
+        {% for role in about.experience %}
+        <div class="card" style="background:var(--card-alt);margin-bottom:0.75rem">
+          <div style="display:flex;justify-content:space-between;gap:0.5rem;flex-wrap:wrap">
+            <h3 style="margin:0;font-size:1rem">{{ role.title }}</h3>
+            <span class="chip">{{ role.period }}</span>
+          </div>
+          <p class="text-dim" style="font-size:0.85rem">{{ role.desc }}</p>
+          <div style="display:flex;flex-wrap:wrap;gap:0.4rem">
+            {% for tag in role.tags %}<span class="chip" style="font-size:0.7rem">{{ tag }}</span>{% endfor %}
+          </div>
+        </div>
+        {% endfor %}
+      </section>
+
+      <section class="card" style="margin-bottom:1.5rem">
+        <div class="card-accent-bar"></div>
+        <h2 class="section-title">Подтверждённые квалификации</h2>
+        <p class="text-dim" style="font-size:0.82rem;margin:0 0 1.25rem">Документы можно посмотреть — не просто список названий.</p>
+
+        {% for c in about.certificates_verified %}
+        <div class="tile" style="margin-bottom:0.75rem">
+          <div style="display:flex;justify-content:space-between;gap:0.75rem;align-items:baseline;flex-wrap:wrap">
+            <strong style="color:var(--heading);font-size:0.95rem">{{ c.title }}</strong>
+            <span class="mono text-red" style="font-size:0.68rem;letter-spacing:0.1em;white-space:nowrap">{{ c.date }}</span>
+          </div>
+          <p class="text-dim" style="font-size:0.8rem;margin:0.3rem 0 0">{{ c.issuer }}{% if c.valid %} · {{ c.valid }}{% endif %}</p>
+          {% if c.note %}<p style="font-size:0.82rem;margin:0.45rem 0 0">{{ c.note }}</p>{% endif %}
+        </div>
+        {% endfor %}
+
+        <h3 style="margin:1.75rem 0 0.5rem;font-size:0.95rem">Образование</h3>
+        {% for edu in about.education %}
+        <p style="font-size:0.88rem;margin:0.3rem 0">{{ edu }}</p>
+        {% endfor %}
+
+        <h3 style="margin:1.5rem 0 0.5rem;font-size:0.95rem">Дополнительные курсы</h3>
+        <div style="display:flex;flex-wrap:wrap;gap:0.35rem">
+          {% for cert in about.certifications %}<span class="chip">{{ cert }}</span>{% endfor %}
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-accent-bar"></div>
+        <h2 class="section-title">Проекты и услуги</h2>
+        <div class="grid grid-2">
+          {% for title, desc in about.projects %}
+          <div class="card" style="background:var(--card-alt)">
+            <h4 style="margin:0 0 0.25rem;font-size:0.9rem">{{ title }}</h4>
+            <p class="text-dim" style="margin:0;font-size:0.8rem">{{ desc }}</p>
+          </div>
+          {% endfor %}
+        </div>
+      </section>
+    </div>
+  </div>
+</main>
+{% endblock %}

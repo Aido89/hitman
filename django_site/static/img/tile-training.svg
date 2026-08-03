@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <rect width="800" height="600" fill="#141416"/>
+  <g stroke="#2a2a2e" stroke-width="1">
+    <path d="M0 120h800M0 240h800M0 360h800M0 480h800"/>
+  </g>
+  <g fill="#1c1c1f">
+    <rect x="80" y="150" width="420" height="60"/>
+    <rect x="80" y="270" width="340" height="60"/>
+    <rect x="80" y="390" width="480" height="60"/>
+  </g>
+  <g fill="#dc2626">
+    <rect x="80" y="150" width="6" height="60"/>
+    <rect x="80" y="270" width="6" height="60"/>
+    <rect x="80" y="390" width="6" height="60"/>
+  </g>
+  <circle cx="620" cy="180" r="60" fill="none" stroke="#dc2626" stroke-width="3"/>
+  <polygon points="600,150 655,180 600,210" fill="#dc2626"/>
+  <rect x="560" y="290" width="120" height="10" fill="#3f3f46"/>
+  <rect x="560" y="290" width="78" height="10" fill="#dc2626"/>
+</svg>

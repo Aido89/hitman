@@ -1,0 +1,50 @@
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+._*
+.__*
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+npm-debug.log*
+
+# Environment variables
+.env
+.env.local
+config.local.js
+
+# Dependencies (if using package manager)
+node_modules/
+package-lock.json
+
+# Build files (только в корне репозитория; не скрывать Portfolio redesign/build)
+dist/
+/build/
+
+# Temporary files
+*.tmp
+*.temp
+
+# Сборка для хостинга (пересоздаётся package-hosting.ps1)
+hosting-upload/
+hosting-upload.zip
+
+# Локальные архивы / бэкапы
+77.zip
+
+# Вложенный репозиторий Vite (не дублировать историю в корне)
+Portfolio redesign/.git/
+
+# Images (optional - uncomment if you don't want to commit images)
+# images/*.jpg
+# images/*.png
+# images/*.jpeg
+

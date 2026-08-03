@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: portfolio
+  namespace: portfolio
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: portfolio
+  template:
+    metadata:
+      labels:
+        app: portfolio
+    spec:
+      hostAliases:
+        # Internal IP of the self-hosted Keycloak host — the edge firewall
+        # doesn't support hairpin NAT, so outbound calls from pods to the
+        # public hostname have to be pinned to the internal address.
+        - ip: "10.0.0.10"
+          hostnames:
+            - "keycloak.hitman.barysgame.kz"
+      imagePullSecrets:
+        - name: harbor-portfolio-pull
+      containers:
+        - name: portfolio
+          image: harbor.hitman.barysgame.kz/portfolio/hitman:b93d33dd
+          envFrom:
+            - secretRef:
+                name: portfolio-django-secrets
+          ports:
+            - containerPort: 8000
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              memory: 256Mi

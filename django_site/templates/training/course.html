@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Google Workspace — курс · Hitman IT{% endblock %}
+{% block content %}
+<main class="container" style="padding-top:2rem;padding-bottom:3rem">
+  <header class="hero" style="padding:2rem">
+    <p class="kicker">Google Workspace · интерактивный курс</p>
+    <h1 class="font-display" id="course-title" style="font-size:1.75rem"></h1>
+    <p id="course-subtitle" class="text-dim"></p>
+  </header>
+
+  <div style="display:flex;justify-content:flex-end;gap:0.5rem;margin:1rem 0">
+    <div style="display:inline-flex;background:var(--card-alt);border:1px solid var(--border);border-radius:0.5rem;padding:0.25rem">
+      <button type="button" class="btn" data-lang="ru" style="padding:0.35rem 0.75rem">Рус</button>
+      <button type="button" class="btn" data-lang="kk" style="padding:0.35rem 0.75rem">Қаз</button>
+    </div>
+  </div>
+
+  <div class="grid" style="grid-template-columns:220px 1.6fr 1fr;gap:1.5rem;align-items:start">
+    <nav class="card" style="max-height:70vh;overflow-y:auto;padding:0.75rem">
+      <ul id="module-nav" style="list-style:none;margin:0;padding:0"></ul>
+    </nav>
+
+    <div class="card" id="module-content"></div>
+
+    <aside class="card" style="text-align:center;position:sticky;top:5rem">
+      <h3>Прогресс</h3>
+      <svg viewBox="0 0 100 100" style="width:8rem;transform:rotate(-90deg)">
+        <circle cx="50" cy="50" r="42" fill="none" stroke="#27272a" stroke-width="10"></circle>
+        <circle id="progress-ring" cx="50" cy="50" r="42" fill="none" stroke="#dc2626" stroke-width="10" stroke-linecap="round"></circle>
+      </svg>
+      <div id="progress-text" style="font-weight:800;color:var(--heading);font-size:1.5rem"></div>
+      <div id="tests-text" class="chip chip-red" style="margin-top:0.5rem"></div>
+      <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border)">
+        <button type="button" class="btn btn-primary" onclick="document.getElementById('bonus-modal').style.display='flex'">Показать бонусные идеи</button>
+      </div>
+    </aside>
+  </div>
+
+  <section class="card" style="margin-top:1.5rem">
+    <h2>Материалы курса</h2>
+    <div style="position:relative;padding-top:56.25%;overflow:hidden;border:1px solid var(--border)">
+      <iframe src="{{ materials_video }}" style="position:absolute;inset:0;width:100%;height:100%" allowfullscreen></iframe>
+    </div>
+    <div id="materials-list" class="grid grid-4" style="margin-top:1rem"></div>
+  </section>
+</main>
+
+<div id="bonus-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:100;align-items:center;justify-content:center;padding:1rem" onclick="if(event.target===this) this.style.display='none'">
+  <div class="card" style="max-width:28rem">
+    <h3>Бонусные идеи</h3>
+    <div id="bonus-content"></div>
+    <button type="button" class="btn btn-ghost" style="margin-top:1rem" onclick="document.getElementById('bonus-modal').style.display='none'">Понятно</button>
+  </div>
+</div>
+
+<script>
+  window.COURSE_DATA = {{ modules_json|safe }};
+  window.BONUS_IDEAS = {{ bonus_ideas_json|safe }};
+  window.MATERIALS_IDS = {{ materials_ids_json|safe }};
+</script>
+<script src="{% static 'js/training.js' %}"></script>
+{% endblock %}

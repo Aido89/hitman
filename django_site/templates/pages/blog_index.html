@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Блог — Hitman IT{% endblock %}
+{% block description %}Экспертные статьи об IT-инфраструктуре, видеостриминге и цифровом обучении: опыт, кейсы и технические лайфхаки для бизнеса.{% endblock %}
+{% block content %}
+<main class="container" style="padding-top:2rem;padding-bottom:3rem">
+  <h1 class="font-display" style="color:var(--heading)">Экспертный блог</h1>
+  <p class="text-dim">Делимся опытом, кейсами и техническими лайфхаками для бизнеса.</p>
+  <div class="grid grid-3" style="margin-top:1.5rem">
+    {% for post in posts %}
+    <div class="card">
+      <span class="chip chip-red" style="text-transform:uppercase;font-size:0.65rem">{{ post.category }}</span>
+      <h3 style="font-size:1rem">{{ post.title }}</h3>
+      <p class="text-dim" style="font-size:0.85rem">{{ post.excerpt }}</p>
+      <a href="{% url 'pages:blog_detail' post.slug %}" class="text-red" style="font-weight:700;font-size:0.85rem">Читать полностью →</a>
+    </div>
+    {% endfor %}
+  </div>
+</main>
+{% endblock %}

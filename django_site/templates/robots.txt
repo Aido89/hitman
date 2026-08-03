@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+
+# Login-gated and personal areas — crawling them just yields redirects.
+# The quote calculator itself is public and indexable.
+Disallow: /admin/
+Disallow: /accounts/
+Disallow: /oidc/
+Disallow: /smeta/my/
+Disallow: /training/
+
+Sitemap: {{ site_url }}/sitemap.xml

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Навыки и технологии — Hitman IT{% endblock %}
+{% block content %}
+<main class="container" style="padding-top:2rem;padding-bottom:3rem">
+  <h1 class="font-display" style="color:var(--heading)">Навыки и технологии</h1>
+  <p class="text-dim">Стек: инфраструктура, DevOps, медиа, обучение.</p>
+
+  <div style="margin:1.5rem 0">
+    {% for block in blocks %}
+    <div class="card" style="margin-bottom:1rem">
+      <div class="card-accent-bar"></div>
+      <h3 style="margin-top:0">{{ block.title }}</h3>
+      <div style="display:flex;flex-wrap:wrap;gap:0.4rem">
+        {% for chip in block.chips %}<span class="chip">{{ chip }}</span>{% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <h2 class="font-display" style="color:var(--heading)">Мои проекты в цифрах</h2>
+  <div class="grid grid-3">
+    {% for value, text in metrics %}
+    <div class="card">
+      <div class="text-red" style="font-size:1.5rem;font-weight:800">{{ value }}</div>
+      <p class="text-dim" style="font-size:0.85rem">{{ text }}</p>
+    </div>
+    {% endfor %}
+  </div>
+</main>
+{% endblock %}

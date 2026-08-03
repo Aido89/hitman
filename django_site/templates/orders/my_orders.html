@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Мои заявки — Hitman IT{% endblock %}
+{% block content %}
+<main class="container" style="padding-top:2rem;padding-bottom:3rem">
+  <div class="card">
+    <div class="card-accent-bar"></div>
+    <h1 class="font-display" style="color:var(--black);margin-top:0">Мои заявки</h1>
+
+    {% if leads %}
+      <div style="display:flex;flex-direction:column;gap:0.75rem;margin-top:1.5rem">
+        {% for lead in leads %}
+          <div class="card" style="padding:1rem 1.25rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap">
+            <div>
+              <strong style="color:var(--black)">{{ lead.service_label }}</strong>
+              <div class="text-dim" style="font-size:0.85rem">{{ lead.created_at|date:"d.m.Y H:i" }}</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:0.75rem">
+              <span style="font-weight:600">{{ lead.total }}₸</span>
+              <span class="chip {% if lead.status == 'new' %}chip-red{% endif %}">{{ lead.get_status_display }}</span>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="text-dim">Заявок пока нет. <a href="{% url 'orders:constructor' %}">Собрать смету</a></p>
+    {% endif %}
+  </div>
+</main>
+{% endblock %}

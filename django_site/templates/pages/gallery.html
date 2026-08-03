@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Фото и видео с работ — Hitman IT{% endblock %}
+{% block description %}Как это выглядит на площадке: трансляции, мероприятия, студия, серверные. Реальные фото и видео с наших проектов.{% endblock %}
+{% block content %}
+<main class="container" style="padding-top:2.5rem;padding-bottom:3rem">
+
+  <p class="section-kicker">// С площадки</p>
+  <h1 class="font-display" style="color:var(--heading);margin:0">Фото и видео</h1>
+  <div class="title-bar"></div>
+  <p class="text-dim" style="max-width:42rem">
+    Как это выглядит в работе — режиссёрские, площадки, оборудование, серверные.
+  </p>
+
+  {% if categories %}
+  <div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin:2rem 0">
+    <a href="{% url 'pages:gallery' %}" class="chip {% if not active %}chip-red{% endif %}">Всё · {{ total }}</a>
+    {% for c in categories %}
+    <a href="?c={{ c.slug }}" class="chip {% if active == c.slug %}chip-red{% endif %}">{{ c.title }} · {{ c.count }}</a>
+    {% endfor %}
+  </div>
+
+  {% if videos %}
+  <section style="margin-bottom:2.5rem">
+    <h2 class="section-title" style="font-size:1.2rem">Видео</h2>
+    <div class="grid grid-2">
+      {% for v in videos %}
+      {# Facade: a thumbnail that swaps itself for the iframe on click. Embedding
+         several YouTube players up front would cost megabytes before anyone
+         presses play. #}
+      <figure class="card" style="padding:0;overflow:hidden;margin:0">
+        <button type="button" class="video-facade" data-yt="{{ v.youtube_id }}"
+                style="all:unset;cursor:pointer;display:block;width:100%;position:relative;aspect-ratio:16/9;background:#000">
+          <img src="https://i.ytimg.com/vi/{{ v.youtube_id }}/hqdefault.jpg" alt="{{ v.title }}"
+               loading="lazy" style="width:100%;height:100%;object-fit:cover;opacity:0.75">
+          <span aria-hidden="true" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center">
+            <span style="width:4rem;height:4rem;background:var(--red);display:flex;align-items:center;justify-content:center">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg>
+            </span>
+          </span>
+        </button>
+        <figcaption style="padding:1rem">
+          <strong style="color:var(--heading);font-size:0.95rem">{{ v.title }}</strong>
+          {% if v.caption %}<p class="text-dim" style="font-size:0.82rem;margin:0.3rem 0 0">{{ v.caption }}</p>{% endif %}
+        </figcaption>
+      </figure>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  {% if photos %}
+  <section>
+    {% if videos %}<h2 class="section-title" style="font-size:1.2rem">Фото</h2>{% endif %}
+    <div class="gallery-grid">
+      {% for p in photos %}
+      <button type="button" class="gallery-item" data-index="{{ forloop.counter0 }}"
+              data-src="{{ p.src }}" data-caption="{{ p.caption|default:'' }}"
+              aria-label="Открыть: {{ p.alt }}">
+        <img src="{{ p.src }}" alt="{{ p.alt }}" loading="lazy" decoding="async">
+        {% if p.caption %}<span class="gallery-caption">{{ p.caption }}</span>{% endif %}
+      </button>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  {% else %}
+  <div class="card" style="margin-top:2rem;text-align:center;padding:3rem 1.5rem">
+    <p class="mono text-red" style="font-size:0.72rem;letter-spacing:0.2em;text-transform:uppercase;margin:0 0 0.75rem">Галерея пока пуста</p>
+    <p class="text-dim" style="max-width:34rem;margin:0 auto">
+      Фотографии появятся здесь автоматически, как только файлы окажутся в
+      <code style="color:var(--heading)">static/img/gallery/&lt;категория&gt;/</code>.
+      Правка кода для этого не нужна.
+    </p>
+  </div>
+  {% endif %}
+
+  <section style="text-align:center;margin-top:3rem">
+    <h2 class="section-title">Нужна такая же работа?</h2>
+    <div style="display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap;margin-top:1rem">
+      <a href="{% url 'orders:constructor' %}" class="btn btn-primary">Рассчитать смету</a>
+      <a href="{% url 'pages:cases' %}" class="btn btn-outline-red">Кейсы с результатом</a>
+    </div>
+  </section>
+</main>
+
+<dialog id="lightbox" aria-label="Просмотр фотографии">
+  <button type="button" id="lb-close" aria-label="Закрыть">✕</button>
+  <button type="button" id="lb-prev" aria-label="Предыдущее фото">‹</button>
+  <img id="lb-img" alt="">
+  <button type="button" id="lb-next" aria-label="Следующее фото">›</button>
+  <p id="lb-caption"></p>
+</dialog>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  (function () {
+    // Video facade -> real player, only once the visitor asks for it.
+    document.querySelectorAll('.video-facade').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var id = btn.dataset.yt;
+        var frame = document.createElement('iframe');
+        // nocookie host: no tracking cookie until playback actually starts.
+        frame.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0';
+        frame.title = btn.querySelector('img').alt;
+        frame.allow = 'accelerometer; autoplay; encrypted-media; picture-in-picture';
+        frame.allowFullscreen = true;
+        frame.style.cssText = 'width:100%;aspect-ratio:16/9;border:0;display:block';
+        btn.replaceWith(frame);
+        if (window.track) window.track('gallery_video_play', { id: id });
+      });
+    });
+
+    var items = Array.prototype.slice.call(document.querySelectorAll('.gallery-item'));
+    if (!items.length) return;
+
+    var dlg = document.getElementById('lightbox');
+    var img = document.getElementById('lb-img');
+    var cap = document.getElementById('lb-caption');
+    var current = 0;
+
+    function show(i) {
+      current = (i + items.length) % items.length;
+      var el = items[current];
+      img.src = el.dataset.src;
+      img.alt = el.querySelector('img').alt;
+      cap.textContent = el.dataset.caption || '';
+      cap.style.display = el.dataset.caption ? 'block' : 'none';
+    }
+
+    items.forEach(function (el, i) {
+      el.addEventListener('click', function () {
+        show(i);
+        // showModal gives focus trapping and Esc-to-close for free.
+        if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', '');
+        if (window.track) window.track('gallery_photo_open');
+      });
+    });
+
+    document.getElementById('lb-close').addEventListener('click', function () { dlg.close(); });
+    document.getElementById('lb-prev').addEventListener('click', function (e) { e.stopPropagation(); show(current - 1); });
+    document.getElementById('lb-next').addEventListener('click', function (e) { e.stopPropagation(); show(current + 1); });
+
+    document.addEventListener('keydown', function (e) {
+      if (!dlg.open) return;
+      if (e.key === 'ArrowLeft') show(current - 1);
+      if (e.key === 'ArrowRight') show(current + 1);
+    });
+
+    // Click on the backdrop (but not the photo) closes.
+    dlg.addEventListener('click', function (e) { if (e.target === dlg) dlg.close(); });
+  })();
+</script>
+{% endblock %}

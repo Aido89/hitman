@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Форматы работы и услуги — Hitman IT{% endblock %}
+{% block content %}
+<main class="container" style="padding-top:2rem;padding-bottom:3rem">
+  <h1 class="font-display" style="color:var(--heading)">Форматы работы и услуги</h1>
+  <p class="text-dim">Гибкие решения, адаптированные под ваши цели.</p>
+
+  <div class="grid grid-2" style="margin-top:1.5rem">
+    {% for f in formats %}
+    <div class="card">
+      <h3 style="margin:0 0 0.25rem;display:flex;align-items:center;gap:0.6rem"><img src="{% static f.icon %}" alt="" width="24" height="24">{{ f.title }}</h3>
+      {% if f.price_from %}
+      <p class="mono" style="font-size:0.75rem;letter-spacing:0.12em;text-transform:uppercase;margin:0.35rem 0 0.6rem">
+        <span class="text-dim">от</span> <span class="text-red" style="font-size:1.05rem;font-weight:700">{{ f.price_from }}</span>
+      </p>
+      {% endif %}
+      <p class="text-dim" style="font-size:0.8rem;margin:0 0 0.5rem">{{ f.audience }}</p>
+      <p style="font-size:0.9rem;margin-bottom:0.75rem">{{ f.desc }}</p>
+      <a href="{% url 'orders:constructor' %}" class="text-red font-tracked" style="font-size:0.72rem">Рассчитать →</a>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div style="text-align:center;margin-top:2rem">
+    <a href="{% url 'orders:constructor' %}" class="btn btn-primary">Рассчитать смету на главной</a>
+  </div>
+</main>
+{% endblock %}

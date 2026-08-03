@@ -1,0 +1,10 @@
+Django>=4.2,<5
+mozilla-django-oidc>=4.0
+python-dotenv>=1.0
+gunicorn>=21.2
+psycopg2-binary>=2.9
+whitenoise>=6.6
+Pillow>=10
+# Transitive via mozilla-django-oidc, but pinned explicitly because
+# orders/notifications.py imports it directly.
+requests>=2.31

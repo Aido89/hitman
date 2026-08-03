@@ -1,0 +1,62 @@
+<div class="service-fields" data-service="streaming" style="display:none">
+  <p class="text-dim" style="font-size:0.85rem">1 смена = 10 ч. Операторы: 40 000₸ / смену / чел. Вторая смена +80%.</p>
+
+  <label style="font-weight:600;display:block;margin-bottom:0.5rem">Тип трансляции</label>
+  <div class="grid grid-4" style="gap:0.5rem;margin-bottom:1rem">
+    <label class="tile-btn"><input type="radio" name="preset" value="party">Частная вечеринка</label>
+    <label class="tile-btn"><input type="radio" name="preset" value="podcast">Подкаст</label>
+    <label class="tile-btn"><input type="radio" name="preset" value="webinar">Вебинар</label>
+    <label class="tile-btn"><input type="radio" name="preset" value="sport">Спорт</label>
+    <label class="tile-btn"><input type="radio" name="preset" value="concert">Концерт</label>
+    <label class="tile-btn selected"><input type="radio" name="preset" value="forum" checked>Форум</label>
+    <label class="tile-btn"><input type="radio" name="preset" value="live">Прямой эфир</label>
+    <label class="tile-btn"><input type="radio" name="preset" value="record">Запись эфира</label>
+  </div>
+
+  <label style="font-weight:600;display:block;margin-bottom:0.5rem">Основное оборудование</label>
+  <div class="grid grid-2" style="gap:0.5rem;margin-bottom:1rem">
+    <div>Sony FX-3 (50k) <select name="qtyFx3"><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option></select></div>
+    <div>Sony α7 III (30k) <select name="qtySonyA7"><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option></select></div>
+    <div>Sony 500 (30k) <select name="qtySony500"><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option></select></div>
+    <div>Handycam (15k) <select name="qtyHandycam"><option>0</option><option>1</option></select></div>
+    <div>PTZ Clever mic (15k) <select name="qtyPtz"><option>0</option><option>1</option></select></div>
+  </div>
+
+  <label style="font-weight:600;display:block;margin-bottom:0.5rem">Спецоборудование, свет, звук</label>
+  <div class="grid grid-4" style="gap:0.5rem;margin-bottom:1rem">
+    <label class="tile-btn"><input type="checkbox" name="tile" value="crane">Кран Jib (+100k)</label>
+    <label class="tile-btn"><input type="checkbox" name="tile" value="crane9m">Кран 9m (+150k)</label>
+    <label class="tile-btn"><input type="checkbox" name="tile" value="pavilion">Павильон (+100k)</label>
+    <label class="tile-btn"><input type="checkbox" name="tile" value="datavideo">Datavideo (+120k)</label>
+    <label class="tile-btn"><input type="checkbox" name="tile" value="lens40x">Объектив 40× (+40k)</label>
+    <label class="tile-btn"><input type="checkbox" name="tile" value="optics400m">Оптика 400м (+40k)</label>
+    <label class="tile-btn"><input type="checkbox" name="tile" value="led">LED свет (+20k)</label>
+    <label class="tile-btn"><input type="checkbox" name="tile" value="tele">Суфлер (+20k)</label>
+    <label class="tile-btn"><input type="checkbox" name="tile" value="lav">Петли 2 шт (+15k)</label>
+    <label class="tile-btn"><input type="checkbox" name="tile" value="montage">Монтаж (+50k)</label>
+    <label class="tile-btn"><input type="checkbox" name="tile" value="color">Цветокор (+20k)</label>
+    <label class="tile-btn"><input type="checkbox" name="tile" value="graphics">Графика (+15k)</label>
+  </div>
+
+  <label style="font-weight:600;display:block;margin-bottom:0.5rem">Подкасты</label>
+  <label style="display:block"><input type="radio" name="podcastPkg" value="none" checked> Без подкаст-пакета</label>
+  <label style="display:block"><input type="radio" name="podcastPkg" value="online"> Podcast онлайн — 100k</label>
+  <label style="display:block;margin-bottom:1rem"><input type="radio" name="podcastPkg" value="with-edit"> Podcast + монтаж — 150k</label>
+
+  <div class="grid grid-2" style="margin-bottom:1rem">
+    <div>
+      <label style="font-size:0.85rem">Операторов (до 8)</label>
+      <select name="operatorCount"><option>0</option><option selected>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option></select>
+    </div>
+    <div>
+      <label style="font-size:0.85rem">Смены</label>
+      <select name="shiftCount"><option value="1">1 смена</option><option value="2">2 смены (+80%)</option></select>
+    </div>
+  </div>
+
+  <label style="display:block"><input type="checkbox" name="staff" value="sound"> Режиссёр звука (+50,000₸)</label>
+  <label style="display:block;margin-bottom:0.75rem"><input type="checkbox" name="staff" value="director"> Режиссёр эфира (+80,000₸)</label>
+  <label style="display:block"><input type="checkbox" name="outCity"> Выезд за город (+20%)</label>
+  <label style="display:block"><input type="checkbox" name="insurance"> Страховка оборудования (+5,000₸)</label>
+  <label style="display:block"><input type="checkbox" name="tile" value="rails"> Рельсы (по договорённости)</label>
+</div>

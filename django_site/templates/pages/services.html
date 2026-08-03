@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Услуги и цены — Hitman IT{% endblock %}
+{% block description %}IT-инфраструктура, видеостриминг, обучение, консалтинг, ремонт и веб-разработка в Казахстане. Прозрачные цены, расчёт сметы онлайн.{% endblock %}
+{% block content %}
+<main class="container" style="padding-top:2.5rem;padding-bottom:3rem">
+
+  <p class="section-kicker">// Что мы делаем</p>
+  <h1 class="font-display" style="color:var(--heading);margin:0">Услуги и цены</h1>
+  <div class="title-bar"></div>
+  <p class="text-dim" style="max-width:42rem">
+    Шесть направлений — от серверной стойки до прямого эфира. Цены указаны как отправная точка;
+    точную сумму под вашу задачу считает <a href="{% url 'orders:constructor' %}" class="text-red">конструктор сметы</a>.
+  </p>
+
+  <div class="grid grid-2" style="margin-top:2rem">
+    {% for card in cards %}
+    <div class="card" id="service-{{ forloop.counter }}">
+      <div class="card-accent-bar"></div>
+      {% if card.image %}
+      <img src="{% static card.image %}" alt="" style="width:100%;height:9rem;object-fit:cover;margin-bottom:1rem">
+      {% endif %}
+
+      <h2 style="font-size:1.15rem;display:flex;align-items:flex-start;gap:0.6rem;margin:0 0 0.5rem">
+        <img src="{% static card.icon %}" alt="" width="24" height="24" style="flex:none;margin-top:0.15rem">
+        {{ card.title }}
+      </h2>
+
+      <div style="display:flex;align-items:baseline;gap:0.75rem;flex-wrap:wrap;margin-bottom:0.75rem">
+        {% if card.price_from %}
+        <span class="mono" style="font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-dim)">
+          от <span class="text-red" style="font-size:1.1rem;font-weight:700">{{ card.price_from }}</span>
+        </span>
+        {% else %}
+        <span class="mono text-red" style="font-size:0.75rem;letter-spacing:0.12em;text-transform:uppercase">Цена по задаче</span>
+        {% endif %}
+        {% if card.audience %}<span class="chip">{{ card.audience }}</span>{% endif %}
+      </div>
+
+      <p class="text-dim" style="font-size:0.9rem">{{ card.desc }}</p>
+
+      {% if card.groups %}
+      <details style="margin-top:0.75rem">
+        <summary class="mono text-red" style="cursor:pointer;font-size:0.72rem;letter-spacing:0.15em;text-transform:uppercase;list-style:none">
+          Технологии и состав работ ▾
+        </summary>
+        <div style="margin-top:0.75rem">
+          {% for label, chips in card.groups %}
+          <h3 class="text-dim" style="font-size:0.68rem;text-transform:uppercase;letter-spacing:0.1em;margin:0.75rem 0 0.4rem;font-weight:600">{{ label }}</h3>
+          <div style="display:flex;flex-wrap:wrap;gap:0.35rem">
+            {% for chip in chips %}<span class="chip">{{ chip }}</span>{% endfor %}
+          </div>
+          {% endfor %}
+        </div>
+      </details>
+      {% endif %}
+
+      <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:1.25rem;padding-top:1rem;border-top:1px solid var(--border)">
+        <a href="{% url 'orders:constructor' %}" class="btn btn-primary" style="padding:0.6rem 1.1rem;font-size:0.78rem">Рассчитать смету</a>
+        {% if card.with_ai %}
+        <button type="button" class="btn btn-ghost" style="padding:0.6rem 1.1rem;font-size:0.78rem"
+                onclick="document.getElementById('ai-modal').style.display='flex'">AI-консультация</button>
+        {% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  {% if gallery_preview %}
+  <section class="section-block" style="margin-top:3.5rem">
+    <p class="section-kicker">// Как это выглядит</p>
+    <h2 class="section-title">С площадки</h2>
+    <div class="title-bar"></div>
+    <p class="text-dim" style="margin:0 0 1.5rem">Реальные съёмки, режиссёрские и оборудование в работе.</p>
+    <div class="gallery-grid">
+      {% for p in gallery_preview %}
+      <a href="{% url 'pages:gallery' %}?c={{ p.category }}" class="gallery-item" aria-label="{{ p.alt }}">
+        <img src="{{ p.src }}" alt="{{ p.alt }}" loading="lazy" decoding="async">
+        {% if p.caption %}<span class="gallery-caption">{{ p.caption }}</span>{% endif %}
+      </a>
+      {% endfor %}
+    </div>
+    <p style="margin-top:1.25rem">
+      <a href="{% url 'pages:gallery' %}" class="text-red font-tracked" style="font-size:0.75rem">Вся галерея · {{ gallery_total }} →</a>
+    </p>
+  </section>
+  {% endif %}
+
+  <section class="section-block" id="repair-prices" style="margin-top:3.5rem">
+    <p class="section-kicker">// Прайс · ремонт техники</p>
+    <h2 class="section-title">Сколько стоит ремонт</h2>
+    <div class="title-bar"></div>
+    <p style="margin:0 0 1.5rem">
+      <span class="badge-outline">{{ repair_warranty }}</span>
+    </p>
+    <div class="grid grid-2">
+      {% for g in repair_groups %}
+      <div class="card">
+        <h3 style="margin:0 0 1rem;font-size:1rem">{{ g.title }}</h3>
+        <table style="width:100%;border-collapse:collapse;font-size:0.88rem">
+          {% for name, price in g.items %}
+          <tr style="border-bottom:1px solid var(--border)">
+            <td style="padding:0.55rem 0;color:var(--text)">{{ name }}</td>
+            <td class="mono" style="padding:0.55rem 0;text-align:right;white-space:nowrap;color:var(--heading);font-weight:600">{{ price }}</td>
+          </tr>
+          {% endfor %}
+        </table>
+        {% if g.note %}<p class="text-dim" style="font-size:0.78rem;margin:0.75rem 0 0">{{ g.note }}</p>{% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="section-block" style="margin-top:3.5rem">
+    <p class="section-kicker">// В цифрах</p>
+    <h2 class="section-title">Опыт за 15 лет</h2>
+    <div class="title-bar"></div>
+    <div class="grid grid-3">
+      {% for m in metrics %}
+      <div class="tile">
+        <div class="font-display" style="font-size:2rem;color:var(--heading);line-height:1">{{ m.number }}</div>
+        <p class="text-dim" style="font-size:0.85rem;margin:0.4rem 0 0">{{ m.desc }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section style="text-align:center;margin-top:3rem">
+    <h2 class="section-title">Не нашли свою задачу?</h2>
+    <p class="text-dim" style="max-width:32rem;margin:0 auto 1.5rem">
+      Опишите её в свободной форме — подскажем решение и сориентируем по стоимости.
+    </p>
+    <div style="display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap">
+      <a href="{% url 'orders:constructor' %}" class="btn btn-primary">Рассчитать смету</a>
+      <a href="https://wa.me/message/VGBVTLQBLHQ7I1" target="_blank" rel="noopener noreferrer" class="btn btn-outline-red">Написать в WhatsApp</a>
+    </div>
+  </section>
+</main>
+
+<div id="ai-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:100;align-items:center;justify-content:center;padding:1rem" onclick="if(event.target===this) this.style.display='none'">
+  <div class="card" style="max-width:28rem;width:100%">
+    <h3 style="margin-top:0">AI-консультант</h3>
+    <p class="text-dim" style="font-size:0.9rem">Функция подключается к бэкенду (<code>/api/ai-consultant</code>) — сейчас это заготовка интерфейса.</p>
+    <button type="button" class="btn btn-ghost" onclick="document.getElementById('ai-modal').style.display='none'">Закрыть</button>
+  </div>
+</div>
+{% endblock %}

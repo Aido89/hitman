@@ -1,0 +1,141 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}HITMAN — Hitman IT{% endblock %}</title>
+  <meta name="description" content="{% block description %}Интегратор цифровых решений: IT-инфраструктура, видеостриминг и обучение в Казахстане.{% endblock %}">
+  <meta name="theme-color" content="#ffffff">
+  <link rel="icon" type="image/svg+xml" href="{% static 'img/logo-mark.svg' %}">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="{% block og_title %}Hitman IT — интегратор цифровых решений{% endblock %}">
+  <meta property="og:description" content="IT-инфраструктура, видеостриминг и обучение в Казахстане.">
+  <meta property="og:image" content="{% static 'img/gallery/avatar-real.jpg' %}">
+  <link rel="canonical" href="{% block canonical %}https://hitman.barysgame.kz{{ request.path }}{% endblock %}">
+  <link rel="stylesheet" href="{% static 'css/site.css' %}">
+  {% include "_analytics.html" %}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "Hitman IT",
+    "url": "https://hitman.barysgame.kz",
+    "telephone": "+77024013140",
+    "image": "https://hitman.barysgame.kz{% static 'img/gallery/avatar-real.jpg' %}",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Косшы",
+      "addressRegion": "Акмолинская область",
+      "addressCountry": "KZ"
+    },
+    "sameAs": [
+      "https://wa.me/message/VGBVTLQBLHQ7I1",
+      "https://t.me/AIDOKHAN"
+    ]
+  }
+  </script>
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+  <div class="statusbar">
+    <div class="container statusbar-inner">
+      <span style="display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap">
+        <span><span class="pulse-dot" aria-hidden="true"></span>На связи · Астана / Косшы</span>
+        <a href="tel:+77024013140" class="hide-mobile" style="color:var(--white)">+7 702 40 131 40</a>
+      </span>
+      <span style="display:flex;gap:1.25rem;align-items:center">
+        <a href="https://wa.me/message/VGBVTLQBLHQ7I1" target="_blank" rel="noopener noreferrer" class="text-red">WhatsApp</a>
+        <a href="https://t.me/AIDOKHAN" target="_blank" rel="noopener noreferrer" class="hide-mobile text-red">Telegram</a>
+      </span>
+    </div>
+  </div>
+  <nav class="navbar">
+    <div class="container navbar-inner">
+      <a href="{% url 'pages:home' %}" class="navbar-brand">
+        <img src="{% static 'img/logo-mark.svg' %}" alt="" width="30" height="30" aria-hidden="true">
+        <span style="display:flex;flex-direction:column;line-height:1.15">
+          <span>HITMAN</span>
+          <span class="mono text-red" style="font-size:0.55rem;letter-spacing:0.35em;font-weight:700">IT DIVISION</span>
+        </span>
+      </a>
+      <div class="navbar-links">
+        <a href="{% url 'pages:services' %}" class="{% if request.resolver_match.url_name == 'services' %}active{% endif %}">Услуги</a>
+        <a href="{% url 'pages:cases' %}" class="{% if request.resolver_match.url_name == 'cases' %}active{% endif %}">Кейсы</a>
+        <a href="{% url 'pages:gallery' %}" class="{% if request.resolver_match.url_name == 'gallery' %}active{% endif %}">Галерея</a>
+        <a href="{% url 'orders:constructor' %}" class="{% if request.resolver_match.url_name == 'constructor' %}active{% endif %}">Смета</a>
+        <a href="{% url 'training:course' %}" class="{% if request.resolver_match.url_name == 'course' %}active{% endif %}">Обучение{% if not user.is_authenticated %} <span style="font-size:0.7em;opacity:0.6" aria-label="требуется вход">🔒</span>{% endif %}</a>
+        <a href="{% url 'pages:home' %}#contacts">Контакты</a>
+      </div>
+      <div style="display:flex;align-items:center;gap:0.75rem">
+        {% if user.is_authenticated %}
+          {% if user.is_staff %}<a href="{% url 'admin:index' %}" class="chip chip-red">Админ</a>{% endif %}
+          <a href="{% url 'orders:my_orders' %}" class="chip">Мои заявки</a>
+          <span style="font-size:0.85rem;color:#a1a1aa">{{ user.first_name|default:user.email }}</span>
+          <a href="{% url 'accounts:logout' %}" class="btn btn-ghost" style="padding:0.4rem 0.9rem;font-size:0.8rem">Выйти</a>
+        {% else %}
+          <a href="{% url 'accounts:login' %}" class="btn btn-primary" style="padding:0.4rem 0.9rem;font-size:0.8rem">Войти</a>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+
+  {% block content %}{% endblock %}
+
+  <footer class="site-footer" style="text-align:left;padding:3rem 0 0">
+    <div class="container" style="display:grid;grid-template-columns:1.3fr 1fr 1fr 1.2fr;gap:2.5rem" id="footer-grid">
+      <div>
+        <div style="display:flex;align-items:center;gap:0.7rem;margin-bottom:0.5rem">
+          <img src="{% static 'img/logo-mark.svg' %}" alt="" width="34" height="34">
+          <span style="display:flex;flex-direction:column;line-height:1.15;color:var(--white);font-weight:700">
+            HITMAN
+            <span class="mono text-red" style="font-size:0.55rem;letter-spacing:0.35em">IT DIVISION</span>
+          </span>
+        </div>
+        <p style="font-size:0.8rem;margin:0.75rem 0;color:var(--text-dim)!important">Интегратор цифровых решений.<br>IT-инфраструктура · стриминг · обучение.</p>
+        <div class="social-icons">
+          {% for c in social_links %}
+          <a href="{{ c.href }}" target="_blank" rel="noopener noreferrer" aria-label="{{ c.label }}">
+            {% include "_social_icon.html" with label=c.label %}
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+      <div>
+        <p class="mono text-red" style="font-size:0.68rem;letter-spacing:0.3em;text-transform:uppercase;margin:0 0 1rem">Терминал</p>
+        <div style="display:grid;gap:0.6rem;font-size:0.85rem">
+          <a href="{% url 'orders:constructor' %}">Конструктор сметы</a>
+          <a href="{% url 'training:course' %}">Курс Workspace{% if not user.is_authenticated %} 🔒{% endif %}</a>
+          <a href="{% url 'pages:blog_index' %}">Блог</a>
+          <a href="{% url 'accounts:login' %}">Личный кабинет</a>
+        </div>
+      </div>
+      <div>
+        <p class="mono text-red" style="font-size:0.68rem;letter-spacing:0.3em;text-transform:uppercase;margin:0 0 1rem">Протоколы</p>
+        <div style="display:grid;gap:0.6rem;font-size:0.85rem">
+          <a href="{% url 'pages:services' %}">Все услуги и цены</a>
+          <a href="{% url 'pages:cases' %}">Кейсы</a>
+          <a href="{% url 'pages:gallery' %}">Фото и видео</a>
+          <a href="{% url 'pages:blog_index' %}">Блог</a>
+          <a href="{% url 'pages:about' %}">Обо мне</a>
+        </div>
+      </div>
+      <div>
+        <p class="mono text-red" style="font-size:0.68rem;letter-spacing:0.3em;text-transform:uppercase;margin:0 0 1rem">Статус</p>
+        <div class="mono" style="display:grid;gap:0.6rem;font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase">
+          <span style="display:flex;align-items:center"><span class="status-dot status-ok"></span>Инфраструктура: в норме</span>
+          <span style="display:flex;align-items:center"><span class="status-dot status-ok"></span>Стриминг: готов</span>
+          <span style="display:flex;align-items:center"><span class="status-dot status-ok"></span>Поддержка: на связи</span>
+          <span style="display:flex;align-items:center"><span class="status-dot status-warn"></span>Загрузка: плотный график</span>
+        </div>
+      </div>
+    </div>
+    <div class="container" style="border-top:1px solid rgba(255,255,255,0.08);margin-top:2.5rem;padding-top:1rem;padding-bottom:1.25rem;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap">
+      <span class="mono" style="font-size:0.68rem;letter-spacing:0.15em;color:var(--text-dim)">&copy; {% now "Y" %} HITMAN IT · Создано с фокусом на результат</span>
+      <span class="mono" style="font-size:0.68rem;letter-spacing:0.15em;color:var(--text-dim)">Астана / Косшы</span>
+    </div>
+  </footer>
+
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

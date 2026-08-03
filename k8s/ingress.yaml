@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: portfolio
+  namespace: portfolio
+  annotations:
+    cert-manager.io/cluster-issuer: internal-ca-issuer
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: hitman.barysgame.kz
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: portfolio
+                port:
+                  number: 80
+  tls:
+    - hosts:
+        - hitman.barysgame.kz
+      secretName: hitman-tls

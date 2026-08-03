@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}{{ post.title }} — Hitman IT{% endblock %}
+{% block description %}{{ post.intro|truncatechars:160 }}{% endblock %}
+{% block og_title %}{{ post.title }} — Hitman IT{% endblock %}
+{% block content %}
+<main class="container" style="padding-top:2rem;padding-bottom:3rem;max-width:48rem">
+  <a href="{% url 'pages:blog_index' %}" class="text-red" style="font-weight:700;font-size:0.85rem">← Назад в блог</a>
+  <div class="card" style="margin-top:1rem">
+    <span class="chip chip-red" style="text-transform:uppercase;font-size:0.65rem">{{ post.category }}</span>
+    <h1 class="font-display" style="color:var(--heading)">{{ post.title }}</h1>
+    <p class="text-dim" style="font-size:0.85rem">{{ post.year }} · {{ post.read_time }}</p>
+    <p style="font-size:1.1rem;font-weight:600;color:var(--red-dark)">{{ post.intro }}</p>
+    {% for kind, text in post.body %}
+      {% if kind == "h2" %}<h2 style="color:var(--heading)">{{ text }}</h2>
+      {% elif kind == "p" %}<p>{{ text }}</p>
+      {% elif kind == "quote" %}<div class="card" style="background:rgba(220,38,38,0.08);border-color:var(--border-red)"><p style="font-style:italic;margin:0">{{ text }}</p></div>
+      {% endif %}
+    {% endfor %}
+    <div style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem">
+      <div>
+        <div style="font-weight:700;color:var(--heading)">{{ post.author }}</div>
+        <div class="text-dim" style="font-size:0.85rem">{{ post.author_role }}</div>
+      </div>
+      <a href="{% url 'orders:constructor' %}" class="btn btn-primary">{{ post.cta }}</a>
+    </div>
+  </div>
+</main>
+{% endblock %}
