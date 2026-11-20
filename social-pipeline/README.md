@@ -31,6 +31,17 @@ docker compose ps        # postiz стартует 1-2 минуты
    `docker compose exec n8n n8n import:workflow --input=/workflows/publish-video.json`
    и включите его (Active) в интерфейсе.
 
+### Попробовать локально (на маке, без доменов)
+
+```bash
+cp .env.example .env   # домены можно не трогать, секреты заполнить
+docker compose -f docker-compose.yml -f docker-compose.local.yml up -d
+```
+
+Postiz: http://localhost:4007, n8n: http://localhost:5678. Webhook: `http://localhost:5678/webhook/hitman-publish`.
+Площадки с OAuth (YouTube, TikTok, Instagram) локально подключаются только если в их приложении
+разрешён redirect на `http://localhost:4007`; Telegram работает и так.
+
 ## 2. Ключи площадок
 
 Без своего «приложения разработчика» площадку подключить нельзя. Ключи кладутся в `.env`,
