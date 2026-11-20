@@ -7,7 +7,7 @@ U=min(W,H)/1080; V=H>W
 def font(n,s): return ImageFont.truetype(F+n,int(s*U))
 B=lambda s:font("DejaVuSans-Bold.ttf",s); R=lambda s:font("DejaVuSans.ttf",s); M=lambda s:font("DejaVuSansMono.ttf",s)
 BG=(10,14,22); GRID=(18,26,38); RED=(232,44,64); WHITE=(255,255,255); GREY=(150,165,185); GREEN=(70,220,140); PANEL=(22,30,44); BLUE=(70,150,255)
-SITE="Aidyn.stream"; NAME="HITMAN DEVOPS"
+SITE="aidyn.stream"; NAME="HITMAN DEVOPS"
 dur=float(subprocess.check_output(["ffprobe","-v","error","-show_entries","format=duration","-of","csv=p=0","voice.mp3"]))
 T=json.load(open("timing.json"))+[dur+1.5]; TOTAL=T[-1]
 ease=lambda x:1-(1-max(0,min(1,x)))**3
