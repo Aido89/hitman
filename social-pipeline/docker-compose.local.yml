@@ -1,6 +1,6 @@
 # Локальный запуск на ноутбуке без доменов и HTTPS:
 #   docker compose -f docker-compose.yml -f docker-compose.local.yml up -d
-# Postiz: http://localhost:4007   n8n: http://localhost:5678
+# Postiz: http://localhost:4007   n8n: http://localhost:5678   ролики: http://localhost:8090
 services:
   caddy:
     profiles: [prod]
@@ -23,3 +23,7 @@ services:
       N8N_PROTOCOL: http
       WEBHOOK_URL: http://localhost:5678/
       N8N_SECURE_COOKIE: "false"
+
+  media:
+    ports:
+      - "8090:80"

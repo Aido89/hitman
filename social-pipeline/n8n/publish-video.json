@@ -111,7 +111,7 @@
       ],
       "parameters": {
         "respondWith": "json",
-        "responseBody": "={{ JSON.stringify({ ok: true, postiz: $json }) }}",
+        "responseBody": "={{ JSON.stringify({ ok: true, postiz: $input.all().map(i => i.json) }) }}",
         "options": {}
       }
     }

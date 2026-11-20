@@ -1,0 +1,13 @@
+{
+  "_comment": "Скопируйте в channels.json и подставьте id из Postiz: curl -H \"Authorization: $POSTIZ_API_KEY\" http://localhost:4007/api/public/v1/integrations",
+  "9x16": [
+    {"id": "<id YouTube>",   "provider": "youtube"},
+    {"id": "<id TikTok>",    "provider": "tiktok"},
+    {"id": "<id Instagram>", "provider": "instagram"},
+    {"id": "<id Telegram>",  "provider": "telegram"}
+  ],
+  "16x9": [
+    {"id": "<id YouTube>",   "provider": "youtube"},
+    {"id": "<id Telegram>",  "provider": "telegram"}
+  ]
+}

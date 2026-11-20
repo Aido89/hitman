@@ -12,3 +12,9 @@
 {$N8N_DOMAIN} {
 	reverse_proxy n8n:5678
 }
+
+# раздача роликов для площадок (Instagram требует публичный URL); задайте MEDIA_DOMAIN в .env
+{$MEDIA_DOMAIN} {
+	root * /srv/media
+	file_server
+}
