@@ -1,0 +1,14 @@
+{
+	email {$ACME_EMAIL}
+}
+
+{$POSTIZ_DOMAIN} {
+	request_body {
+		max_size 2GB
+	}
+	reverse_proxy postiz:5000
+}
+
+{$N8N_DOMAIN} {
+	reverse_proxy n8n:5678
+}

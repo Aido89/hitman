@@ -1,0 +1,181 @@
+{
+  "name": "Hitman: публикация ролика",
+  "nodes": [
+    {
+      "id": "1",
+      "name": "Вебхук: новый ролик",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "hitman-publish",
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "hitman-publish",
+        "responseMode": "responseNode",
+        "options": {}
+      }
+    },
+    {
+      "id": "2",
+      "name": "Проверить и подготовить",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        0
+      ],
+      "parameters": {
+        "jsCode": "// Проверка токена и сборка поста для Postiz\nconst req = $input.first().json;\nconst token = req.headers['x-pipeline-token'];\nif (!$env.PIPELINE_WEBHOOK_TOKEN || token !== $env.PIPELINE_WEBHOOK_TOKEN) {\n  throw new Error('unauthorized: неверный X-Pipeline-Token');\n}\nconst b = req.body || {};\nif (!b.video_url) throw new Error('нужно поле video_url');\nif (!Array.isArray(b.channels) || b.channels.length === 0) {\n  throw new Error('нужен массив channels: [{id, provider}] (id из GET /integrations)');\n}\nconst caption = [b.caption_ru, b.caption_kz].filter(Boolean).join('\\n\\n');\nconst title = (b.title || caption.split('\\n')[0] || 'Hitman').slice(0, 100);\nreturn [{ json: {\n  video_url: b.video_url,\n  caption, title,\n  publish_at: b.publish_at || null,\n  channels: b.channels,\n}}];"
+      }
+    },
+    {
+      "id": "3",
+      "name": "Postiz: загрузить видео",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        440,
+        0
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.POSTIZ_API_URL }}/upload-from-url",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ $env.POSTIZ_API_KEY }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ url: $json.video_url }) }}",
+        "options": {
+          "timeout": 600000
+        }
+      }
+    },
+    {
+      "id": "4",
+      "name": "Собрать пост",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        660,
+        0
+      ],
+      "parameters": {
+        "jsCode": "// Тело POST /posts. Настройки площадок сверяйте с docs.postiz.com/public-api\nconst d = $('Проверить и подготовить').first().json;\nconst media = $input.first().json; // ответ upload-from-url: {id, path, ...}\nconst settingsFor = (provider) => {\n  switch (provider) {\n    case 'youtube':\n      return { __type: 'youtube', title: d.title, type: 'public' };\n    case 'tiktok':\n      return { __type: 'tiktok', privacy_level: 'PUBLIC_TO_EVERYONE', duet: true, stitch: true,\n               comment: true, autoAddMusic: 'no', brand_content_toggle: false,\n               brand_organic_toggle: false, content_posting_method: 'DIRECT_POST' };\n    case 'instagram':\n    case 'instagram-standalone':\n      return { __type: provider, post_type: 'post' };\n    default:\n      return { __type: provider };\n  }\n};\nreturn [{ json: {\n  type: d.publish_at ? 'schedule' : 'now',\n  date: d.publish_at ? new Date(d.publish_at).toISOString() : new Date().toISOString(),\n  shortLink: false,\n  tags: [],\n  posts: d.channels.map(ch => ({\n    integration: { id: ch.id },\n    value: [{ content: d.caption, image: [{ id: media.id, path: media.path }] }],\n    settings: settingsFor(ch.provider),\n  })),\n}}];"
+      }
+    },
+    {
+      "id": "5",
+      "name": "Postiz: создать пост",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        880,
+        0
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.POSTIZ_API_URL }}/posts",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ $env.POSTIZ_API_KEY }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {}
+      }
+    },
+    {
+      "id": "6",
+      "name": "Ответ",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1100,
+        0
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ ok: true, postiz: $json }) }}",
+        "options": {}
+      }
+    }
+  ],
+  "connections": {
+    "Вебхук: новый ролик": {
+      "main": [
+        [
+          {
+            "node": "Проверить и подготовить",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Проверить и подготовить": {
+      "main": [
+        [
+          {
+            "node": "Postiz: загрузить видео",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postiz: загрузить видео": {
+      "main": [
+        [
+          {
+            "node": "Собрать пост",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Собрать пост": {
+      "main": [
+        [
+          {
+            "node": "Postiz: создать пост",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postiz: создать пост": {
+      "main": [
+        [
+          {
+            "node": "Ответ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Almaty"
+  },
+  "active": false
+}
